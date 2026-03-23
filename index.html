@@ -55,29 +55,49 @@
         .section-title { font-size: 13px; font-weight: 600; color: #8f959e; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .panel-section { margin-bottom: 24px; }
 
-        /* 待办卡片 */
-        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        /* 待办列表 */
+        .todo-list { background: #fff; border-radius: 8px; border: 1px solid #e5e6eb; overflow: hidden; }
+        .todo-row { display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid #f0f1f3; cursor: pointer; transition: background 0.15s; }
+        .todo-row:last-child { border-bottom: none; }
+        .todo-row:hover { background: #f5f6f8; }
+        .todo-indicator { width: 4px; height: 28px; border-radius: 2px; margin-right: 12px; flex-shrink: 0; }
+        .todo-indicator.red { background: #f54a45; }
+        .todo-indicator.orange { background: #ff8800; }
+        .todo-indicator.yellow { background: #ffb300; }
+        .todo-indicator.blue { background: #3370ff; }
+        .todo-indicator.green { background: #00b42a; }
+        .todo-name { font-size: 13px; font-weight: 600; color: #1f2329; min-width: 140px; display: flex; align-items: center; gap: 6px; }
+        .todo-name .icon { font-size: 14px; }
+        .todo-tags { flex: 1; display: flex; gap: 8px; flex-wrap: wrap; margin: 0 16px; }
+        .todo-tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 4px; font-size: 12px; background: #f7f8fa; color: #646a73; }
+        .todo-tag:hover { background: #e8f3ff; color: #3370ff; }
+        .todo-tag .num { font-weight: 600; color: #1f2329; }
+        .todo-total { min-width: 50px; text-align: right; }
+        .todo-badge { background: #f54a45; color: #fff; border-radius: 10px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
+        .todo-badge.orange { background: #ff8800; }
+        .todo-badge.yellow { background: #ffb300; color: #1f2329; }
+        .todo-badge.blue { background: #3370ff; }
+        .todo-arrow { color: #c9cdd4; margin-left: 12px; font-size: 14px; }
+        .todo-row:hover .todo-arrow { color: #3370ff; }
+
+        /* 保留旧卡片样式给运营用 */
+        .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
         .card { background: #fff; border-radius: 8px; border: 1px solid #e5e6eb; padding: 16px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
         .card:hover { border-color: #3370ff; box-shadow: 0 4px 12px rgba(51,112,255,0.1); transform: translateY(-1px); }
         .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .card.red::before { background: #f54a45; }
         .card.orange::before { background: #ff8800; }
-        .card.yellow::before { background: #ffb300; }
-        .card.blue::before { background: #3370ff; }
-        .card.green::before { background: #00b42a; }
         .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
         .card-title { font-size: 13px; font-weight: 600; color: #1f2329; display: flex; align-items: center; gap: 6px; }
         .card-icon { font-size: 16px; }
         .card-badge { background: #f54a45; color: #fff; border-radius: 10px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
         .card-badge.orange { background: #ff8800; }
-        .card-badge.yellow { background: #ffb300; color: #1f2329; }
         .card-items { display: flex; flex-direction: column; gap: 6px; }
         .card-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border-radius: 6px; background: #f7f8fa; font-size: 13px; }
         .card-item:hover { background: #e8f3ff; }
         .card-item-label { color: #646a73; }
         .card-item-count { font-weight: 600; color: #1f2329; display: flex; align-items: center; gap: 4px; }
         .card-item-count .arrow { color: #3370ff; font-size: 12px; }
-        .card-desc { font-size: 12px; color: #8f959e; margin-top: 8px; line-height: 1.5; }
         .card-action { margin-top: 10px; font-size: 13px; color: #3370ff; font-weight: 500; cursor: pointer; }
         .card-action:hover { text-decoration: underline; }
 
@@ -231,169 +251,93 @@
                     <span>今日有 <strong>20 项</strong>待处理事务，请及时处理。</span>
                 </div>
 
-                <!-- 待办区 -->
+                <!-- 待办区 - 紧凑列表 -->
                 <div class="panel-section">
-                    <div class="section-title">📌 我的待办</div>
-                    <div class="card-grid">
-                        <div class="card red">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📋</span>待确认结算单</span>
-                                <span class="card-badge">4</span>
+                    <div class="section-title">📌 我的待办 · 点击跳转对应模块</div>
+                    <div class="todo-list">
+                        <div class="todo-row">
+                            <div class="todo-indicator red"></div>
+                            <div class="todo-name"><span class="icon">📋</span>待确认结算单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">技服 <span class="num">3</span></span>
+                                <span class="todo-tag">后返 <span class="num">1</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">订单技术服务费</span>
-                                    <span class="card-item-count">3 张 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">客户后返</span>
-                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
+                            <div class="todo-total"><span class="todo-badge">4</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                        <div class="card orange">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📥</span>待生成应收单</span>
-                                <span class="card-badge orange">2</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator orange"></div>
+                            <div class="todo-name"><span class="icon">📥</span>待生成应收单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">技服 <span class="num">2</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">订单技术服务费</span>
-                                    <span class="card-item-count">2 张 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-desc">结算单已确认，请通过单据转换工具生成应收单</div>
+                            <div class="todo-total"><span class="todo-badge orange">2</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                        <div class="card orange">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📤</span>待生成应付单</span>
-                                <span class="card-badge orange">3</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator orange"></div>
+                            <div class="todo-name"><span class="icon">📤</span>待生成应付单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">技服 <span class="num">1</span></span>
+                                <span class="todo-tag">后返 <span class="num">2</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">订单技术服务费</span>
-                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">客户后返</span>
-                                    <span class="card-item-count">2 张 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-desc">结算单已确认，请通过单据转换工具生成应付单</div>
+                            <div class="todo-total"><span class="todo-badge orange">3</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                    </div>
-                    <div class="card-grid">
-                        <div class="card yellow">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">⏳</span>待审核通过应收单</span>
-                                <span class="card-badge yellow">1</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator yellow"></div>
+                            <div class="todo-name"><span class="icon">⏳</span>待审核应收单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">技服 <span class="num">1</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">订单技术服务费</span>
-                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-desc">已提交审批，请关注审核进度</div>
+                            <div class="todo-total"><span class="todo-badge yellow">1</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                        <div class="card yellow">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">⏳</span>待审核通过应付单</span>
-                                <span class="card-badge yellow">1</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator yellow"></div>
+                            <div class="todo-name"><span class="icon">⏳</span>待审核应付单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">后返 <span class="num">1</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">客户后返</span>
-                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-desc">已提交审批，请关注审核进度</div>
+                            <div class="todo-total"><span class="todo-badge yellow">1</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                        <div class="card red">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">⚠️</span>明细待核对</span>
-                                <span class="card-badge">2</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator red"></div>
+                            <div class="todo-name"><span class="icon">⚠️</span>明细待核对</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">异常数据 <span class="num">2</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">导入数据存在异常</span>
-                                    <span class="card-item-count">2 条 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
+                            <div class="todo-total"><span class="todo-badge">2</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                    </div>
-                    <div class="card-grid">
-                        <div class="card blue">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">🔗</span>待核销应收单</span>
-                                <span class="card-badge">5</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator blue"></div>
+                            <div class="todo-name"><span class="icon">🔗</span>待核销应收单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">技服 <span class="num">5</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">订单技术服务费</span>
-                                    <span class="card-item-count">5 张 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
+                            <div class="todo-total"><span class="todo-badge blue">5</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                        <div class="card blue">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">🔗</span>待核销应付单</span>
-                                <span class="card-badge">3</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator blue"></div>
+                            <div class="todo-name"><span class="icon">🔗</span>待核销应付单</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">后返 <span class="num">3</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">客户后返</span>
-                                    <span class="card-item-count">3 张 <span class="arrow">→</span></span>
-                                </div>
+                            <div class="todo-total"><span class="todo-badge blue">3</span></div>
+                            <span class="todo-arrow">›</span>
+                        </div>
+                        <div class="todo-row">
+                            <div class="todo-indicator red"></div>
+                            <div class="todo-name"><span class="icon">❌</span>计费任务失败</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">数据源异常 <span class="num">1</span></span>
+                                <span class="todo-tag">规则缺失 <span class="num">1</span></span>
                             </div>
-                        </div>
-                        <div class="card red">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">❌</span>计费任务失败</span>
-                                <span class="card-badge">2</span>
-                            </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">数据源异常</span>
-                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">规则缺失</span>
-                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-action">→ 查看并重跑</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- 门户导航区 -->
-                <div class="panel-section portal-section">
-                    <div class="section-title">🗂️ 功能导航</div>
-                    <div class="portal-grid">
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot blue"></span>订单技术服务费</div>
-                            <div class="portal-link"><span class="link-icon">📊</span>计费明细<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">💰</span>应收应付单<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录<span class="link-arrow">›</span></div>
-                        </div>
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot purple"></span>客户后返</div>
-                            <div class="portal-link"><span class="link-icon">📊</span>计费明细<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">💰</span>应付单管理<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录<span class="link-arrow">›</span></div>
-                        </div>
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot green"></span>共用功能</div>
-                            <div class="portal-link"><span class="link-icon">⚙️</span>计费规则<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">✅</span>应收应付核销<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                            <div class="todo-total"><span class="todo-badge">2</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
                     </div>
                 </div>
@@ -446,62 +390,13 @@
                     </div>
                 </div>
 
-                <div class="divider"></div>
-
-                <div class="panel-section portal-section">
-                    <div class="section-title">🗂️ 功能导航</div>
-                    <div class="portal-grid">
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot blue"></span>规则与方案配置</div>
-                            <div class="portal-link"><span class="link-icon">⚙️</span>计费规则配置<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">🔍</span>核对方案配置<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📋</span>导入模板管理<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📝</span>后返业务登记<span class="link-arrow">›</span></div>
-                        </div>
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot purple"></span>计费与结算</div>
-                            <div class="portal-link"><span class="link-icon">📊</span>计费明细（技服）<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📊</span>计费明细（后返）<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
-                        </div>
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot green"></span>监控与档案</div>
-                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">🏢</span>往来主体档案<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">📑</span>基础档案管理<span class="link-arrow">›</span></div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- ==================== 财务 ==================== -->
             <div class="role-panel" id="panel-finance">
                 <div class="alert alert-success">
                     <span>✅</span>
-                    <span>当前无待办事项。财务角色通过下方导航进入对应功能模块操作。</span>
-                </div>
-
-                <div class="panel-section portal-section">
-                    <div class="section-title">🗂️ 功能导航</div>
-                    <div class="portal-grid">
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot blue"></span>收付款与核销</div>
-                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录（技服）<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录（后返）<span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">✅</span>应收应付核销<span class="link-arrow">›</span></div>
-                        </div>
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot purple"></span>单据查看</div>
-                            <div class="portal-link"><span class="link-icon">📄</span>结算单<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">💰</span>应收应付单<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
-                            <div class="portal-link"><span class="link-icon">🧾</span>开票申请<span class="link-arrow">›</span></div>
-                        </div>
-                        <div class="portal-group">
-                            <div class="portal-group-title"><span class="dot green"></span>监控</div>
-                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
-                        </div>
-                    </div>
+                    <span>当前无待办事项。请通过左侧菜单进入对应功能模块操作。</span>
                 </div>
             </div>
 
