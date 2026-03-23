@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>销售结算系统 · 工作台</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f5f6f8; color: #1f2329; font-size: 14px;
+            display: flex; height: 100vh; overflow: hidden;
+        }
+
+        /* 左侧菜单 */
+        .sidebar { width: 220px; background: #fff; border-right: 1px solid #e5e6eb; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-logo { padding: 20px 16px 16px; border-bottom: 1px solid #f0f1f3; }
+        .sidebar-logo .logo-title { font-size: 15px; font-weight: 600; color: #1f2329; }
+        .sidebar-logo .logo-sub { font-size: 12px; color: #8f959e; margin-top: 2px; }
+        .sidebar-nav { flex: 1; padding: 8px 0; overflow-y: auto; }
+        .nav-section { padding: 12px 16px 4px; font-size: 11px; color: #8f959e; font-weight: 500; letter-spacing: 0.5px; }
+        .nav-item { display: flex; align-items: center; padding: 8px 16px; cursor: pointer; transition: background 0.15s; position: relative; user-select: none; }
+        .nav-item:hover { background: #f5f6f8; }
+        .nav-item.active { background: #e8f3ff; color: #3370ff; }
+        .nav-item.active .nav-icon { color: #3370ff; }
+        .nav-icon { width: 20px; margin-right: 8px; font-size: 15px; flex-shrink: 0; }
+        .nav-label { flex: 1; font-size: 13px; }
+        .nav-badge { background: #f54a45; color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 11px; font-weight: 600; min-width: 18px; text-align: center; }
+        .sidebar-user { padding: 12px 16px; border-top: 1px solid #f0f1f3; display: flex; align-items: center; gap: 8px; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #3370ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+        .user-info { flex: 1; }
+        .user-name { font-size: 13px; font-weight: 500; }
+        .user-role { font-size: 11px; color: #8f959e; }
+
+        /* 主内容区 */
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .topbar { height: 52px; background: #fff; border-bottom: 1px solid #e5e6eb; display: flex; align-items: center; padding: 0 24px; gap: 12px; flex-shrink: 0; }
+        .topbar-title { font-size: 16px; font-weight: 600; color: #1f2329; }
+        .topbar-date { font-size: 13px; color: #8f959e; margin-left: auto; }
+        .content { flex: 1; overflow-y: auto; padding: 24px; }
+
+        /* 角色切换 */
+        .role-switcher { display: flex; gap: 8px; margin-bottom: 20px; }
+        .role-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #e5e6eb; background: #fff; cursor: pointer; font-size: 13px; color: #646a73; transition: all 0.2s; }
+        .role-btn:hover { border-color: #3370ff; color: #3370ff; }
+        .role-btn.active { background: #3370ff; border-color: #3370ff; color: #fff; font-weight: 500; }
+
+        /* 提示条 */
+        .alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .alert-warning { background: #fffbe6; border: 1px solid #ffe58f; color: #875500; }
+        .alert-success { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; }
+        .alert-info { background: #e6f4ff; border: 1px solid #91caff; color: #0958d9; }
+
+        /* 区块标题 */
+        .section-title { font-size: 13px; font-weight: 600; color: #8f959e; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .panel-section { margin-bottom: 24px; }
+
+        /* 待办卡片 */
+        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .card { background: #fff; border-radius: 8px; border: 1px solid #e5e6eb; padding: 16px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+        .card:hover { border-color: #3370ff; box-shadow: 0 4px 12px rgba(51,112,255,0.1); transform: translateY(-1px); }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+        .card.red::before { background: #f54a45; }
+        .card.orange::before { background: #ff8800; }
+        .card.yellow::before { background: #ffb300; }
+        .card.blue::before { background: #3370ff; }
+        .card.green::before { background: #00b42a; }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .card-title { font-size: 13px; font-weight: 600; color: #1f2329; display: flex; align-items: center; gap: 6px; }
+        .card-icon { font-size: 16px; }
+        .card-badge { background: #f54a45; color: #fff; border-radius: 10px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
+        .card-badge.orange { background: #ff8800; }
+        .card-badge.yellow { background: #ffb300; color: #1f2329; }
+        .card-items { display: flex; flex-direction: column; gap: 6px; }
+        .card-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px; border-radius: 6px; background: #f7f8fa; font-size: 13px; }
+        .card-item:hover { background: #e8f3ff; }
+        .card-item-label { color: #646a73; }
+        .card-item-count { font-weight: 600; color: #1f2329; display: flex; align-items: center; gap: 4px; }
+        .card-item-count .arrow { color: #3370ff; font-size: 12px; }
+        .card-desc { font-size: 12px; color: #8f959e; margin-top: 8px; line-height: 1.5; }
+        .card-action { margin-top: 10px; font-size: 13px; color: #3370ff; font-weight: 500; cursor: pointer; }
+        .card-action:hover { text-decoration: underline; }
+
+        /* 门户导航区 */
+        .portal-section { margin-top: 8px; }
+        .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .portal-group { background: #fff; border-radius: 8px; border: 1px solid #e5e6eb; padding: 16px; }
+        .portal-group-title { font-size: 13px; font-weight: 600; color: #1f2329; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f0f1f3; display: flex; align-items: center; gap: 6px; }
+        .portal-group-title .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+        .portal-group-title .dot.blue { background: #3370ff; }
+        .portal-group-title .dot.purple { background: #722ed1; }
+        .portal-group-title .dot.green { background: #00b42a; }
+        .portal-group-title .dot.gray { background: #8f959e; }
+        .portal-link { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #646a73; transition: all 0.15s; }
+        .portal-link:hover { background: #e8f3ff; color: #3370ff; }
+        .portal-link .link-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+        .portal-link .link-arrow { margin-left: auto; color: #c9cdd4; font-size: 12px; }
+        .portal-link:hover .link-arrow { color: #3370ff; }
+        .portal-tag { font-size: 10px; padding: 1px 5px; border-radius: 3px; background: #f0f1f3; color: #8f959e; margin-left: 4px; }
+        .portal-tag.readonly { background: #e6f4ff; color: #3370ff; }
+
+        /* 分隔线 */
+        .divider { height: 1px; background: #e5e6eb; margin: 4px 0 20px; }
+
+        /* 空状态 */
+        .empty-card { background: #fff; border-radius: 8px; border: 1px dashed #e5e6eb; padding: 32px; text-align: center; color: #8f959e; }
+        .empty-icon { font-size: 36px; margin-bottom: 8px; }
+        .empty-text { font-size: 14px; }
+
+        /* 飞书消息 */
+        .msg-demo { background: #fff; border-radius: 8px; border: 1px solid #e5e6eb; overflow: hidden; }
+        .msg-header { background: #f5f6f8; padding: 10px 16px; font-size: 12px; color: #8f959e; border-bottom: 1px solid #e5e6eb; display: flex; align-items: center; gap: 6px; }
+        .msg-body { padding: 16px; }
+        .msg-bot { display: flex; align-items: flex-start; gap: 10px; }
+        .bot-avatar { width: 32px; height: 32px; border-radius: 8px; background: #3370ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .bot-bubble { background: #fff; border: 1px solid #e5e6eb; border-radius: 4px 12px 12px 12px; padding: 12px 14px; max-width: 320px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .bot-bubble-title { font-size: 13px; font-weight: 600; color: #1f2329; margin-bottom: 8px; }
+        .bot-bubble-row { display: flex; gap: 6px; margin-bottom: 4px; font-size: 13px; }
+        .bot-bubble-key { color: #8f959e; flex-shrink: 0; }
+        .bot-bubble-val { color: #1f2329; font-weight: 500; }
+        .bot-bubble-btn { margin-top: 10px; padding: 6px 14px; background: #3370ff; color: #fff; border-radius: 6px; font-size: 13px; cursor: pointer; display: inline-block; }
+        .bot-bubble-btn:hover { background: #2860de; }
+
+        .role-panel { display: none; }
+        .role-panel.active { display: block; }
+    </style>
+</head>
+<body>
+    <!-- 左侧菜单 -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-title">销售结算系统</div>
+            <div class="logo-sub">往来核销管理</div>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-section">工作台</div>
+            <div class="nav-item active" onclick="switchNav(this)">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">工作台</span>
+            </div>
+
+            <div class="nav-section">订单技术服务费</div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">计费明细</span>
+                <span class="nav-badge">2</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📄</span>
+                <span class="nav-label">结算单管理</span>
+                <span class="nav-badge">3</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📁</span>
+                <span class="nav-label">数据导入与核对</span>
+                <span class="nav-badge">2</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">应收应付单</span>
+                <span class="nav-badge">3</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">🏦</span>
+                <span class="nav-label">收付款记录</span>
+            </div>
+
+            <div class="nav-section">客户后返</div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">后返业务登记</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">计费明细</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📄</span>
+                <span class="nav-label">结算单管理</span>
+                <span class="nav-badge">1</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">应付单管理</span>
+                <span class="nav-badge">2</span>
+            </div>
+
+            <div class="nav-section">共用</div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">计费规则配置</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">应收应付核销</span>
+                <span class="nav-badge">8</span>
+            </div>
+            <div class="nav-item" onclick="switchNav(this)">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">运营看板</span>
+            </div>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-avatar" id="userAvatar">张</div>
+            <div class="user-info">
+                <div class="user-name" id="userName">张三</div>
+                <div class="user-role" id="userRoleLabel">销售结算专员</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main">
+        <div class="topbar">
+            <div class="topbar-title">工作台</div>
+            <div class="topbar-date" id="topbarDate">2026年3月23日 周一</div>
+        </div>
+
+        <div class="content">
+            <div class="role-switcher">
+                <button class="role-btn active" onclick="switchRole('specialist', this)">销售结算专员</button>
+                <button class="role-btn" onclick="switchRole('ops', this)">结算运营</button>
+                <button class="role-btn" onclick="switchRole('finance', this)">财务</button>
+                <button class="role-btn" onclick="switchRole('msg', this)">飞书消息推送示例</button>
+            </div>
+
+            <!-- ==================== 销售结算专员 ==================== -->
+            <div class="role-panel active" id="panel-specialist">
+                <div class="alert alert-warning">
+                    <span>🔔</span>
+                    <span>今日有 <strong>17 项</strong>待处理事务，请及时处理。</span>
+                </div>
+
+                <!-- 待办区 -->
+                <div class="panel-section">
+                    <div class="section-title">📌 我的待办</div>
+                    <div class="card-grid">
+                        <div class="card red">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">📋</span>待确认结算单</span>
+                                <span class="card-badge">4</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">订单技术服务费</span>
+                                    <span class="card-item-count">3 张 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">客户后返</span>
+                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card orange">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">📥</span>待确认应收单</span>
+                                <span class="card-badge orange">2</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">订单技术服务费</span>
+                                    <span class="card-item-count">2 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card yellow">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">📤</span>待确认应付单</span>
+                                <span class="card-badge yellow">3</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">订单技术服务费</span>
+                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">客户后返</span>
+                                    <span class="card-item-count">2 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-grid">
+                        <div class="card blue">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">🔗</span>待核销单据</span>
+                                <span class="card-badge">8</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">应收单（技术服务费）</span>
+                                    <span class="card-item-count">5 张 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">应付单（客户后返）</span>
+                                    <span class="card-item-count">3 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card red">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">⚠️</span>明细待核对</span>
+                                <span class="card-badge">2</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">导入数据存在异常</span>
+                                    <span class="card-item-count">2 条 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card red">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">❌</span>异常单据积压</span>
+                                <span class="card-badge">1</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">收付款金额与单据不符</span>
+                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- 门户导航区 -->
+                <div class="panel-section portal-section">
+                    <div class="section-title">🗂️ 功能导航</div>
+                    <div class="portal-grid">
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot blue"></span>订单技术服务费</div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">💰</span>应收应付单<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot purple"></span>客户后返</div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">💰</span>应付单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot green"></span>共用功能</div>
+                            <div class="portal-link"><span class="link-icon">⚙️</span>计费规则<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">✅</span>应收应付核销<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 结算运营 ==================== -->
+            <div class="role-panel" id="panel-ops">
+                <div class="alert alert-warning">
+                    <span>🔔</span>
+                    <span>今日有 <strong>3 类</strong>运营异常需关注，请及时处理。</span>
+                </div>
+
+                <div class="panel-section">
+                    <div class="section-title">📌 我的待办</div>
+                    <div class="card-grid">
+                        <div class="card red">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">❌</span>计费任务失败</span>
+                                <span class="card-badge">2</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">数据源异常</span>
+                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">规则缺失</span>
+                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                            <div class="card-action">→ 查看并重跑</div>
+                        </div>
+                        <div class="card orange">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">⏰</span>规则即将到期</span>
+                                <span class="card-badge orange">3</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">ABC科技 - 技术服务费</span>
+                                    <span class="card-item-count">7天后 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">XYZ集团 - 客户后返</span>
+                                    <span class="card-item-count">5天后 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">DEF公司 - 技术服务费</span>
+                                    <span class="card-item-count">3天后 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                            <div class="card-action">→ 查看并续期</div>
+                        </div>
+                        <div class="card red">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">⚠️</span>规则缺失告警</span>
+                                <span class="card-badge">5</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">5 个往来主体未配置规则</span>
+                                    <span class="card-item-count">查看 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                            <div class="card-action">→ 去配置</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-section portal-section">
+                    <div class="section-title">🗂️ 功能导航</div>
+                    <div class="portal-grid">
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot blue"></span>规则与方案配置</div>
+                            <div class="portal-link"><span class="link-icon">⚙️</span>计费规则配置<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🔍</span>核对方案配置<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📋</span>导入模板管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📝</span>后返业务登记<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot purple"></span>计费与结算</div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细（技服）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细（后返）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot green"></span>监控与档案</div>
+                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏢</span>往来主体档案<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📑</span>基础档案管理<span class="link-arrow">›</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 财务 ==================== -->
+            <div class="role-panel" id="panel-finance">
+                <div class="alert alert-success">
+                    <span>✅</span>
+                    <span>今日暂无待处理事项，当前状态正常。</span>
+                </div>
+
+                <div class="panel-section">
+                    <div class="section-title">📌 我的待办</div>
+                    <div class="card-grid">
+                        <div class="card green">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">📅</span>超期未核销应收单</span>
+                                <span class="card-badge" style="background: #00b42a;">0</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item"><span class="card-item-label">暂无超期单据</span></div>
+                            </div>
+                            <div class="card-desc">应收单确认超 30 天未核销时将在此提示</div>
+                        </div>
+                        <div class="card green">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">📅</span>超期未核销应付单</span>
+                                <span class="card-badge" style="background: #00b42a;">0</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item"><span class="card-item-label">暂无超期单据</span></div>
+                            </div>
+                            <div class="card-desc">应付单确认超 30 天未核销时将在此提示</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="panel-section portal-section">
+                    <div class="section-title">🗂️ 功能导航</div>
+                    <div class="portal-grid">
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot blue"></span>收付款与核销</div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录（技服）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录（后返）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">✅</span>应收应付核销<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot purple"></span>单据查看</div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">💰</span>应收应付单<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🧾</span>开票申请<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot green"></span>监控</div>
+                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== 飞书消息示例 ==================== -->
+            <div class="role-panel" id="panel-msg">
+                <div class="panel-section">
+                    <div class="section-title">💬 飞书消息 · 销售结算系统机器人（阶段一替代方案）</div>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="msg-demo">
+                            <div class="msg-header">🤖 结算单待确认</div>
+                            <div class="msg-body"><div class="msg-bot"><div class="bot-avatar">🤖</div><div class="bot-bubble">
+                                <div class="bot-bubble-title">📋 结算单待确认</div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">业务类型：</span><span class="bot-bubble-val">订单技术服务费</span></div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">往来主体：</span><span class="bot-bubble-val">ABC科技有限公司</span></div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">统计周期：</span><span class="bot-bubble-val">2026-02</span></div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">结算金额：</span><span class="bot-bubble-val">¥ 12,000.00</span></div>
+                                <div class="bot-bubble-btn">查看并确认 →</div>
+                            </div></div></div>
+                        </div>
+                        <div class="msg-demo">
+                            <div class="msg-header">🤖 计费任务失败</div>
+                            <div class="msg-body"><div class="msg-bot"><div class="bot-avatar">🤖</div><div class="bot-bubble">
+                                <div class="bot-bubble-title">⚠️ 计费任务失败</div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">业务类型：</span><span class="bot-bubble-val">订单技术服务费</span></div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">统计周期：</span><span class="bot-bubble-val">2026-02</span></div>
+                                <div class="bot-bubble-row"><span class="bot-bubble-key">失败原因：</span><span class="bot-bubble-val">数据源异常</span></div>
+                                <div class="bot-bubble-btn">查看并重跑 →</div>
+                            </div></div></div>
+                        </div>
+                        <div class="msg-demo">
+                            <div class="msg-header">🤖 规则即将到期</div>
+                            <div class="msg-body"><div class="msg-bot"><div class="bot-avatar">🤖</div><div class="bot-bubble">
+                                <div class="bot-bubble-title">⏰ 规则即将到期</div>
+                                <div style="font-size: 13px; color: #646a73; margin: 8px 0;">以下规则将于 7 天内到期：</div>
+                                <div style="font-size: 13px; color: #1f2329; margin: 6px 0;">· ABC科技 - 订单技术服务费，到期日：2026-03-30</div>
+                                <div style="font-size: 13px; color: #1f2329; margin: 6px 0;">· XYZ集团 - 客户后返，到期日：2026-03-28</div>
+                                <div class="bot-bubble-btn">查看规则列表 →</div>
+                            </div></div></div>
+                        </div>
+                        <div class="msg-demo">
+                            <div class="msg-header">🤖 单据超期提醒</div>
+                            <div class="msg-body"><div class="msg-bot"><div class="bot-avatar">🤖</div><div class="bot-bubble">
+                                <div class="bot-bubble-title">📅 单据超期提醒</div>
+                                <div style="font-size: 13px; color: #646a73; margin: 8px 0;">以下单据已超 30 天未核销：</div>
+                                <div style="font-size: 13px; color: #1f2329; margin: 6px 0;">· 应收单 AR-2026-0023，ABC科技，¥ 8,000.00</div>
+                                <div class="bot-bubble-btn">立即处理 →</div>
+                            </div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchRole(role, btn) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.role-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('panel-' + role).classList.add('active');
+            const roleMap = {
+                specialist: { name: '张三', role: '销售结算专员', avatar: '张' },
+                ops: { name: '李四', role: '结算运营', avatar: '李' },
+                finance: { name: '王五', role: '财务', avatar: '王' },
+                msg: { name: '系统', role: '消息示例', avatar: '系' }
+            };
+            const r = roleMap[role];
+            document.getElementById('userAvatar').textContent = r.avatar;
+            document.getElementById('userName').textContent = r.name;
+            document.getElementById('userRoleLabel').textContent = r.role;
+        }
+        function switchNav(item) {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+        }
+    </script>
+</body>
+</html>
