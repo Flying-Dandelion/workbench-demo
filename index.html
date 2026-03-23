@@ -341,6 +341,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 门户导航区 -->
+                <div class="panel-section" style="margin-top: 4px;">
+                    <div class="section-title">🗂️ 功能导航 · 按业务线分组</div>
+                    <div class="portal-grid">
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot blue"></span>订单技术服务费</div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">💰</span>应收应付单<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot purple"></span>客户后返</div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">💰</span>应付单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot green"></span>共用功能</div>
+                            <div class="portal-link"><span class="link-icon">⚙️</span>计费规则<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">✅</span>应收应付核销<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ==================== 结算运营 ==================== -->
@@ -351,52 +380,85 @@
                 </div>
 
                 <div class="panel-section">
-                    <div class="section-title">📌 我的待办</div>
-                    <div class="card-grid">
-                        <div class="card orange">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">⏰</span>规则即将到期</span>
-                                <span class="card-badge orange">3</span>
+                    <div class="section-title">📌 我的待办 · 点击跳转对应模块</div>
+                    <div class="todo-list">
+                        <div class="todo-row">
+                            <div class="todo-indicator orange"></div>
+                            <div class="todo-name"><span class="icon">⏰</span>规则即将到期</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">ABC科技 <span class="num">7天</span></span>
+                                <span class="todo-tag">XYZ集团 <span class="num">5天</span></span>
+                                <span class="todo-tag">DEF公司 <span class="num">3天</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">ABC科技 - 技术服务费</span>
-                                    <span class="card-item-count">7天后 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">XYZ集团 - 客户后返</span>
-                                    <span class="card-item-count">5天后 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">DEF公司 - 技术服务费</span>
-                                    <span class="card-item-count">3天后 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-action">→ 查看并续期</div>
+                            <div class="todo-total"><span class="todo-badge orange">3</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
-                        <div class="card red">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">⚠️</span>规则缺失告警</span>
-                                <span class="card-badge">5</span>
+                        <div class="todo-row">
+                            <div class="todo-indicator red"></div>
+                            <div class="todo-name"><span class="icon">⚠️</span>规则缺失告警</div>
+                            <div class="todo-tags">
+                                <span class="todo-tag">未配置规则 <span class="num">5</span></span>
                             </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">5 个往来主体未配置规则</span>
-                                    <span class="card-item-count">查看 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-action">→ 去配置</div>
+                            <div class="todo-total"><span class="todo-badge">5</span></div>
+                            <span class="todo-arrow">›</span>
                         </div>
                     </div>
                 </div>
 
+                <div class="panel-section" style="margin-top: 4px;">
+                    <div class="section-title">🗂️ 功能导航 · 按职责分组</div>
+                    <div class="portal-grid">
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot blue"></span>规则与方案配置</div>
+                            <div class="portal-link"><span class="link-icon">⚙️</span>计费规则配置<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🔍</span>核对方案配置<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📋</span>导入模板管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📝</span>后返业务登记<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot purple"></span>计费与结算</div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细（技服）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📊</span>计费明细（后返）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单管理<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📁</span>数据导入与核对<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot green"></span>监控与档案</div>
+                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏢</span>往来主体档案<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">📑</span>基础档案管理<span class="link-arrow">›</span></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ==================== 财务 ==================== -->
             <div class="role-panel" id="panel-finance">
-                <div class="alert alert-success">
-                    <span>✅</span>
-                    <span>当前无待办事项。请通过左侧菜单进入对应功能模块操作。</span>
+                <div class="alert alert-info">
+                    <span>💡</span>
+                    <span>财务角色当前无待办事项，请通过下方导航进入对应功能模块。</span>
+                </div>
+
+                <div class="panel-section">
+                    <div class="section-title">🗂️ 功能导航</div>
+                    <div class="portal-grid">
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot blue"></span>收付款与核销</div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录（技服）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🏦</span>收付款记录（后返）<span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">✅</span>应收应付核销<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot purple"></span>单据查看</div>
+                            <div class="portal-link"><span class="link-icon">📄</span>结算单<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">💰</span>应收应付单<span class="portal-tag readonly">只读</span><span class="link-arrow">›</span></div>
+                            <div class="portal-link"><span class="link-icon">🧾</span>开票申请<span class="link-arrow">›</span></div>
+                        </div>
+                        <div class="portal-group">
+                            <div class="portal-group-title"><span class="dot green"></span>监控</div>
+                            <div class="portal-link"><span class="link-icon">📈</span>运营看板<span class="link-arrow">›</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
