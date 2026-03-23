@@ -228,7 +228,7 @@
             <div class="role-panel active" id="panel-specialist">
                 <div class="alert alert-warning">
                     <span>🔔</span>
-                    <span>今日有 <strong>17 项</strong>待处理事务，请及时处理。</span>
+                    <span>今日有 <strong>20 项</strong>待处理事务，请及时处理。</span>
                 </div>
 
                 <!-- 待办区 -->
@@ -253,7 +253,7 @@
                         </div>
                         <div class="card orange">
                             <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📥</span>待确认应收单</span>
+                                <span class="card-title"><span class="card-icon">📥</span>待生成应收单</span>
                                 <span class="card-badge orange">2</span>
                             </div>
                             <div class="card-items">
@@ -262,11 +262,12 @@
                                     <span class="card-item-count">2 张 <span class="arrow">→</span></span>
                                 </div>
                             </div>
+                            <div class="card-desc">结算单已确认，请通过单据转换工具生成应收单</div>
                         </div>
-                        <div class="card yellow">
+                        <div class="card orange">
                             <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📤</span>待确认应付单</span>
-                                <span class="card-badge yellow">3</span>
+                                <span class="card-title"><span class="card-icon">📤</span>待生成应付单</span>
+                                <span class="card-badge orange">3</span>
                             </div>
                             <div class="card-items">
                                 <div class="card-item">
@@ -278,24 +279,35 @@
                                     <span class="card-item-count">2 张 <span class="arrow">→</span></span>
                                 </div>
                             </div>
+                            <div class="card-desc">结算单已确认，请通过单据转换工具生成应付单</div>
                         </div>
                     </div>
                     <div class="card-grid">
-                        <div class="card blue">
+                        <div class="card yellow">
                             <div class="card-header">
-                                <span class="card-title"><span class="card-icon">🔗</span>待核销单据</span>
-                                <span class="card-badge">8</span>
+                                <span class="card-title"><span class="card-icon">⏳</span>待审核通过应收单</span>
+                                <span class="card-badge yellow">1</span>
                             </div>
                             <div class="card-items">
                                 <div class="card-item">
-                                    <span class="card-item-label">应收单（技术服务费）</span>
-                                    <span class="card-item-count">5 张 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">应付单（客户后返）</span>
-                                    <span class="card-item-count">3 张 <span class="arrow">→</span></span>
+                                    <span class="card-item-label">订单技术服务费</span>
+                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
                                 </div>
                             </div>
+                            <div class="card-desc">已提交审批，请关注审核进度</div>
+                        </div>
+                        <div class="card yellow">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">⏳</span>待审核通过应付单</span>
+                                <span class="card-badge yellow">1</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">客户后返</span>
+                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                            <div class="card-desc">已提交审批，请关注审核进度</div>
                         </div>
                         <div class="card red">
                             <div class="card-header">
@@ -309,17 +321,48 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card red">
+                    </div>
+                    <div class="card-grid">
+                        <div class="card blue">
                             <div class="card-header">
-                                <span class="card-title"><span class="card-icon">❌</span>异常单据积压</span>
-                                <span class="card-badge">1</span>
+                                <span class="card-title"><span class="card-icon">🔗</span>待核销应收单</span>
+                                <span class="card-badge">5</span>
                             </div>
                             <div class="card-items">
                                 <div class="card-item">
-                                    <span class="card-item-label">收付款金额与单据不符</span>
-                                    <span class="card-item-count">1 张 <span class="arrow">→</span></span>
+                                    <span class="card-item-label">订单技术服务费</span>
+                                    <span class="card-item-count">5 张 <span class="arrow">→</span></span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card blue">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">🔗</span>待核销应付单</span>
+                                <span class="card-badge">3</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">客户后返</span>
+                                    <span class="card-item-count">3 张 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card red">
+                            <div class="card-header">
+                                <span class="card-title"><span class="card-icon">❌</span>计费任务失败</span>
+                                <span class="card-badge">2</span>
+                            </div>
+                            <div class="card-items">
+                                <div class="card-item">
+                                    <span class="card-item-label">数据源异常</span>
+                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
+                                </div>
+                                <div class="card-item">
+                                    <span class="card-item-label">规则缺失</span>
+                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
+                                </div>
+                            </div>
+                            <div class="card-action">→ 查看并重跑</div>
                         </div>
                     </div>
                 </div>
@@ -360,29 +403,12 @@
             <div class="role-panel" id="panel-ops">
                 <div class="alert alert-warning">
                     <span>🔔</span>
-                    <span>今日有 <strong>3 类</strong>运营异常需关注，请及时处理。</span>
+                    <span>今日有 <strong>2 类</strong>运营异常需关注，请及时处理。</span>
                 </div>
 
                 <div class="panel-section">
                     <div class="section-title">📌 我的待办</div>
                     <div class="card-grid">
-                        <div class="card red">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">❌</span>计费任务失败</span>
-                                <span class="card-badge">2</span>
-                            </div>
-                            <div class="card-items">
-                                <div class="card-item">
-                                    <span class="card-item-label">数据源异常</span>
-                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
-                                </div>
-                                <div class="card-item">
-                                    <span class="card-item-label">规则缺失</span>
-                                    <span class="card-item-count">1 条 <span class="arrow">→</span></span>
-                                </div>
-                            </div>
-                            <div class="card-action">→ 查看并重跑</div>
-                        </div>
                         <div class="card orange">
                             <div class="card-header">
                                 <span class="card-title"><span class="card-icon">⏰</span>规则即将到期</span>
@@ -453,36 +479,8 @@
             <div class="role-panel" id="panel-finance">
                 <div class="alert alert-success">
                     <span>✅</span>
-                    <span>今日暂无待处理事项，当前状态正常。</span>
+                    <span>当前无待办事项。财务角色通过下方导航进入对应功能模块操作。</span>
                 </div>
-
-                <div class="panel-section">
-                    <div class="section-title">📌 我的待办</div>
-                    <div class="card-grid">
-                        <div class="card green">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📅</span>超期未核销应收单</span>
-                                <span class="card-badge" style="background: #00b42a;">0</span>
-                            </div>
-                            <div class="card-items">
-                                <div class="card-item"><span class="card-item-label">暂无超期单据</span></div>
-                            </div>
-                            <div class="card-desc">应收单确认超 30 天未核销时将在此提示</div>
-                        </div>
-                        <div class="card green">
-                            <div class="card-header">
-                                <span class="card-title"><span class="card-icon">📅</span>超期未核销应付单</span>
-                                <span class="card-badge" style="background: #00b42a;">0</span>
-                            </div>
-                            <div class="card-items">
-                                <div class="card-item"><span class="card-item-label">暂无超期单据</span></div>
-                            </div>
-                            <div class="card-desc">应付单确认超 30 天未核销时将在此提示</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
 
                 <div class="panel-section portal-section">
                     <div class="section-title">🗂️ 功能导航</div>
